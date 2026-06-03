@@ -1,10 +1,14 @@
-<!doctype html>
-<html lang="pt-BR" style="--font-scale: 1;"><head>
+<!DOCTYPE html>
+<html lang="pt-BR" style="--font-scale: 1;">
+<head>
+    <title>Site-Echorizon</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Site Deficiência Visual Galbi</title>
 
-  <style>
+    <!-- PyScript CSS -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css">
+      <style>
     :root {
       --bg: #000000;
       --panel: #3b3b3b4f;
@@ -220,10 +224,15 @@
       #btn-narration { margin-left: 0; }
     }
   </style>
+    <!-- This script tag bootstraps PyScript -->
+    <script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
 </head>
+    
 <body class="light-mode">
+    
+    <script type="py" src="./main.py" config="./pyscript.toml" terminal></script>
 
-<!-- ── INDICADOR FLUTUANTE DE LEITURA ── -->
+    <!-- ── INDICADOR FLUTUANTE DE LEITURA ── -->
 <div id="reading-indicator" role="status" aria-live="polite" class="">
   <span class="pulse"></span>
   <span id="reading-label">Lendo parágrafo 14/14</span>
@@ -253,7 +262,7 @@
     <button id="btn-fundo" title="Alternar entre fundo escuro e claro">Alterar Fundo 🌙</button>
 
     <!-- Modo Narração: lê o elemento ao passar o mouse -->
-    <button id="btn-narration" aria-pressed="false" title="Ativar narração: posicione o mouse sobre qualquer texto para ouvi-lo" class="">
+    <button id="btn-narracao" aria-pressed="false" title="Ativar narração: posicione o mouse sobre qualquer texto para ouvi-lo" class="">
       Modo Narração 🗣️
     </button>
 
@@ -349,214 +358,6 @@
   </div>
 
 </div><!-- /#fichaContent -->
-
-<!-- ── SCRIPTS DE ACESSIBILIDADE ── -->
-<script>
-(function () {
-  'use strict';
-
-  /* ── UTILITÁRIOS ── */
-  const synth = window.speechSynthesis;
-  let currentUtterance = null;
-  let isReading = false;
-  let narrationMode = false;
-  let fontLevel = 0; // 0=normal, 1=grande, 2=muito grande
-  const fontScales = [1, 1.25, 1.55];
-  const fontLabels = ['Normal', 'Grande', 'Muito Grande'];
-
-  const indicator = document.getElementById('reading-indicator');
-  const readingLabel = document.getElementById('reading-label');
-  const toast = document.getElementById('a11y-toast');
-
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2200);
-  }
-
-  /* ── LEITURA ── */
-  function getPortugueseVoice() {
-    const voices = synth.getVoices();
-    return (
-      voices.find(v => v.lang === 'pt-BR') ||
-      voices.find(v => v.lang.startsWith('pt')) ||
-      voices[0]
-    );
-  }
-
-  function stopReading() {
-    synth.cancel();
-    isReading = false;
-    currentUtterance = null;
-    document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
-    indicator.classList.remove('visible');
-    document.getElementById('btn-leitura').setAttribute('aria-pressed', 'false');
-    document.getElementById('btn-leitura').classList.remove('active');
-  }
-
-  function speakText(text, onEnd, targetEl) {
-    if (!synth) { showToast('Seu navegador não suporta síntese de voz.'); return; }
-    synth.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'pt-BR';
-    utter.rate = 0.92;
-    utter.pitch = 1;
-    const voice = getPortugueseVoice();
-    if (voice) utter.voice = voice;
-
-    if (targetEl) {
-      targetEl.classList.add('reading-highlight');
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    utter.onend = () => {
-      if (targetEl) targetEl.classList.remove('reading-highlight');
-      if (onEnd) onEnd();
-    };
-    utter.onerror = () => {
-      if (targetEl) targetEl.classList.remove('reading-highlight');
-      if (onEnd) onEnd();
-    };
-
-    currentUtterance = utter;
-    synth.speak(utter);
-  }
-
-  /* Coleta blocos de texto legíveis da página */
-  function getReadableBlocks() {
-    return Array.from(document.querySelectorAll('h1, h2, h3, p'))
-      .filter(el => {
-        const t = el.innerText.trim();
-        return t.length > 3 && el.closest('header') === null;
-      });
-  }
-
-  function readPageSequentially() {
-    const blocks = getReadableBlocks();
-    let index = 0;
-
-    function readNext() {
-      if (!isReading || index >= blocks.length) {
-        stopReading();
-        showToast('Leitura concluída ✓');
-        return;
-      }
-      const el = blocks[index++];
-      readingLabel.textContent = 'Lendo parágrafo ' + index + '/' + blocks.length;
-      speakText(el.innerText.trim(), readNext, el);
-    }
-
-    readNext();
-  }
-
-  /* ── BOTÃO LEITURA DE TEXTO ── */
-  document.getElementById('btn-leitura').addEventListener('click', function () {
-    if (!synth) { showToast('Seu navegador não suporta síntese de voz.'); return; }
-
-    if (isReading) {
-      stopReading();
-      showToast('Leitura pausada');
-    } else {
-      // Carregar vozes (pode demorar no primeiro acesso)
-      const tryStart = () => {
-        isReading = true;
-        indicator.classList.add('visible');
-        this.setAttribute('aria-pressed', 'true');
-        this.classList.add('active');
-        showToast('Iniciando leitura da página...');
-        readPageSequentially();
-      };
-
-      if (synth.getVoices().length === 0) {
-        synth.addEventListener('voiceschanged', tryStart, { once: true });
-        synth.speak(new SpeechSynthesisUtterance('')); // trigger voices load
-      } else {
-        tryStart();
-      }
-    }
-  });
-
-  /* ── BOTÃO TAMANHO DA FONTE ── */
-  document.getElementById('btn-fonte').addEventListener('click', function () {
-    fontLevel = (fontLevel + 1) % fontScales.length;
-    const scale = fontScales[fontLevel];
-    document.documentElement.style.setProperty('--font-scale', scale);
-    showToast('Fonte: ' + fontLabels[fontLevel]);
-
-    if (narrationMode) {
-      speakText('Tamanho da fonte: ' + fontLabels[fontLevel]);
-    }
-  });
-
-  /* ── BOTÃO ALTERAR FUNDO ── */
-  document.getElementById('btn-fundo').addEventListener('click', function () {
-    const isLight = document.body.classList.toggle('light-mode');
-    this.textContent = isLight ? 'Alterar Fundo 🌙' : 'Alterar Fundo ☀️';
-    showToast(isLight ? 'Modo claro ativado' : 'Modo escuro ativado');
-
-    if (narrationMode) {
-      speakText(isLight ? 'Modo claro ativado' : 'Modo escuro ativado');
-    }
-  });
-
-  /* ── BOTÃO MODO NARRAÇÃO ── */
-  document.getElementById('btn-narration').addEventListener('click', function () {
-    narrationMode = !narrationMode;
-    this.setAttribute('aria-pressed', narrationMode ? 'true' : 'false');
-    this.classList.toggle('active', narrationMode);
-
-    if (narrationMode) {
-      showToast('Narração ativada — passe o mouse sobre o texto');
-      speakText('Modo narração ativado. Passe o mouse sobre qualquer texto para ouvi-lo.');
-    } else {
-      stopReading();
-      showToast('Narração desativada');
-    }
-  });
-
-  /* ── NARRAÇÃO POR HOVER ── */
-  let narrationTimeout = null;
-
-  document.addEventListener('mouseover', function (e) {
-    if (!narrationMode) return;
-
-    const target = e.target.closest('h1, h2, h3, p, li');
-    if (!target) return;
-
-    const text = target.innerText.trim();
-    if (!text || text.length < 4) return;
-
-    clearTimeout(narrationTimeout);
-    narrationTimeout = setTimeout(() => {
-      if (!narrationMode) return;
-      speakText(text, null, target);
-    }, 400); // pequeno atraso para evitar leitura a cada pixel
-  });
-
-  document.addEventListener('mouseout', function (e) {
-    clearTimeout(narrationTimeout);
-  });
-
-  /* ── ACESSIBILIDADE TECLADO: ESC para parar leitura ── */
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isReading) {
-      stopReading();
-      showToast('Leitura interrompida (Esc)');
-    }
-  });
-
-  /* ── FOCUS: lê o elemento focado quando narração ativa ── */
-  document.addEventListener('focusin', function (e) {
-    if (!narrationMode) return;
-    const target = e.target.closest('h1, h2, h3, p');
-    if (!target) return;
-    speakText(target.innerText.trim(), null, target);
-  });
-
-})();
-</script>
-
-
-
+    
 </body>
 </html>
