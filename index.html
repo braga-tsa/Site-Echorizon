@@ -1,168 +1,562 @@
 <!doctype html>
-<html lang="pt-BR">
-  <head>
+<html lang="pt-BR" style="--font-scale: 1;"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Deficiência Visual Galbi</title>
 
-<style>
-        :root{
-  --bg:#000000;
-  --panel:#3b3b3b4f;
-  --accent:#5682a7;
-  --muted:#ffffff;
-  --text:#f2f2f2;
-  --danger:#d14;
-  --info: #4169E1;
-  --critfail: #b10000;
-  --fail: #ffffff;
-  --success:#56ff56;
-  --great: #794dff;
-  --extreme: #ffbf00;
-}
-
-    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding:0px}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--text)}
-
-       .container{max-width:1600px;margin:24px auto;padding:0px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(0,0,0,0.6)}
-    h1{margin:0 0 8px;color:var(--accent)}
-    h2{margin-top:0;color:var(--accent);font-size:16px}
-    h3{color:var(--muted); font-size: 16px; font-family: sans-serif}
-    .ft{padding: 8px; border-radius: 12px}
-    .row.top { display:flex; flex-wrap: wrap; gap:16px; margin-bottom:16px; }
-    .row.bottom { display:flex; gap:16px; align-items:flex-start; margin-bottom:16px; }
-    .col{flex:1}
-    .panel{background:var(--panel);padding:12px;border-radius:30px;border:1px solid rgba(181,143,18,0.08)}
-    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
-    input[type=text],input[type=number],select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);font-size:15px;}
-    textarea{min-height:40px;resize:vertical;}
-    .small{max-width:160px}
-    .attributes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .attr{padding:10px;background:rgba(255,255,255,0.02);border-radius:6px;text-align:center}
-    .attr h3{margin:0;font-size:14px;color:var(--accent)}
-    .attr .val{font-size:20px;margin-top:6px}
-    button{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer; font-weight: bold; margin-left: 8px; margin-block-end: 20px; width: 162px; height: 60px;}
-    button2{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer; font-weight: bold;}
-    button.ghost{background:transparent;border:1px solid rgba(181,143,18,0.12);color:var(--text)}
-    .bars{display:flex;gap:12px}
-    
-    .bar{flex:1;padding:8px;border-radius:6px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);} 
-    .meter{height:18px;background:var(--muted);border-radius:8px;overflow:hidden;margin-top:8px}
-    .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffd24d);width:0%}
-    .controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 8px;
-   }
-    table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{padding:6px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center;font-size:11px}
-    th{color:var(--accent);text-align:center}
-    .skill-val {
-    width: 70px;
-    text-align: center;
-    font-size: 12px;
-    padding: 0px;
+  <style>
+    :root {
+      --bg: #000000;
+      --panel: #3b3b3b4f;
+      --accent: #5682a7;
+      --muted: #ffffff;
+      --text: #f2f2f2;
+      --header-bg: #0b0b0b;
+      --panel-border: rgba(181,143,18,0.08);
+      --shadow: rgba(255,255,255,0.3);
+      --borda: rgba(255,255,255,0.3);
+      --font-scale: 1;
     }
-  
+
+    /* ── MODO CLARO ── */
+    body.light-mode {
+      --bg: #f0f0f0;
+      --panel: rgba(255,255,255,0.75);
+      --accent: #2c5f8a;
+      --muted: #111;
+      --text: #1a1a1a;
+      --header-bg: #dce8f5;
+      --panel-border: rgba(44,95,138,0.2);
+      --shadow: rgba(0,0,0,0.6);
+      --borda: rgba(0,0,0,0.3);
+    }
+
+    * { box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; box-sizing: border-box; padding: 0; margin: 0; }
+
+    html, body {
+      height: all;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* ── LEITURA HIGHLIGHT ── */
+    .reading-highlight {
+      background: rgba(86, 130, 167, 0.35) !important;
+      border-radius: 4px;
+      outline: 2px solid var(--accent);
+      transition: background 0.2s;
+    }
+
+    /* ── HEADER ── */
+    header {
+      padding: 15px 16px 0;
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--borda);
+      box-shadow: 0 6px 30px var(--shadow);
+      margin-bottom: 24px;
+      transition: background 0.4s;
+    }
+
+    header h2 {
+      font-size: clamp(22px, 4vw, 32px);
+      color: var(--accent);
+      margin-left: 8px;
+      margin-bottom: 12px;
+    }
+
+    /* ── BOTÕES ── */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-bottom: 12px;
+    }
+
+    .btn-row button {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+      min-width: 150px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s, opacity 0.2s;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .btn-row button:hover { filter: brightness(1.15); transform: translateY(-2px); }
+    .btn-row button:active { transform: translateY(0); }
+    .btn-row button.active { background: #e07b00; box-shadow: 0 0 12px rgba(224,123,0,0.5); }
+
+    #btn-narration { margin-left: auto; }
+
+    /* ── INDICADOR DE LEITURA ── */
+    #reading-indicator {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: bold;
+      z-index: 9999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      gap: 8px;
+      align-items: center;
+    }
+    #reading-indicator.visible { display: flex; }
+    .pulse { width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(0.7)} }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1600px;
+      margin: 24px auto;
+      padding: 0 16px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 45px;
+      margin-bottom: 20px;
+      color: var(--accent);
+      font-size: calc(28px * var(--font-scale));
+    }
+
+    h2 { color: var(--accent); font-size: calc(16px * var(--font-scale)); margin-top: 0; }
+    h3 { color: var(--muted); font-size: calc(16px * var(--font-scale)); font-family: sans-serif; }
+
+    .ft { padding: 8px; border-radius: 12px; }
+
+    .row-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .col { flex: 1; }
+
+    .panel {
+      background: var(--panel);
+      padding: 16px;
+      border-radius: 30px;
+      border: 1px solid var(--panel-border);
+    }
+
+    .section-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section-block h2 {
+      font-size: calc(19px * var(--font-scale));
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .section-block h3 {
+      text-align: center;
+      font-size: calc(17px * var(--font-scale));
+      color: #d4d4d4;
+      line-height: 1.6;
+    }
+
+    body.light-mode .section-block h3 { color: #444; }
+
+    img { max-width: 100%; border-radius: 8px; }
+
+    #fichaContent {
+      display: block;
+      margin: 0 auto 0px;
+      padding-bottom: 10px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+
+    /* ── TOOLTIP ACESSIBILIDADE ── */
+    #a11y-toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 9998;
+      white-space: nowrap;
+    }
+    #a11y-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 700px) {
+      .row-flex { flex-direction: column; }
+      .btn-row button { min-width: 120px; font-size: 12px; height: 50px; }
+      #btn-narration { margin-left: 0; }
+    }
   </style>
-    
 </head>
-  
-  <body>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Deficiencia Visual Galbi</title>
-    <link rel="stylesheet" href="style.css">
+<body class="light-mode">
 
-
-    <header style="padding:0px;background: linear-gradient(180deg, rgb(255 255 255 / 0%), rgb(255 255 255 / 3%));box-shadow:0 6px 30px rgba(0,0,0,0.6);border-block-end: 1px solid rgb(255 255 255 / 30%);background-color: #0b0b0b;margin-block-end: 24px;margin-block-start: 0px;padding-block-start: 15px;padding-inline: 10px;">
-
-<div> 
-  
-    <h2 style="font-size: 32px;margin-left: 8px;">Site Deficiência Visual Galbi</h2>
-  
+<!-- ── INDICADOR FLUTUANTE DE LEITURA ── -->
+<div id="reading-indicator" role="status" aria-live="polite" class="">
+  <span class="pulse"></span>
+  <span id="reading-label">Lendo parágrafo 14/14</span>
 </div>
 
-    <div style="display:flex">
-    <button id="liga-leitura" style=""> Leitura de Texto 🔊
-</button>
-    <button id="liga-falt" style="">Tamanho da Fonte
-</button>
-    <button id="liga-fundo" style="">Alterar Fundo ☀️
-</button>
-    <button id="liga-fundo" style="margin-left: auto;">Modo Narração 🗣️
-</button>
+<!-- ── TOAST ── -->
+<div id="a11y-toast" aria-live="polite" class="">Modo claro ativado</div>
 
-    </div>
+<!-- ── HEADER ── -->
+<header>
+  <div>
+    <h2>Site Deficiência Visual Galbi</h2>
+  </div>
+  <div class="btn-row">
+
+    <!-- Leitura de Texto: lê a página inteira -->
+    <button id="btn-leitura" aria-pressed="false" title="Ler todo o conteúdo da página em voz alta" class="">
+      Leitura de Texto 🔊
+    </button>
+
+    <!-- Tamanho da Fonte: cicla entre 3 tamanhos dos baguio -->
+    <button id="btn-fonte" title="Aumentar ou diminuir o tamanho da fonte">
+      Tamanho da Fonte 🔤
+    </button>
+
+    <!-- Alterar Fundo: alterna modo claro/escuro -->
+    <button id="btn-fundo" title="Alternar entre fundo escuro e claro">Alterar Fundo 🌙</button>
+
+    <!-- Modo Narração: lê o elemento ao passar o mouse -->
+    <button id="btn-narration" aria-pressed="false" title="Ativar narração: posicione o mouse sobre qualquer texto para ouvi-lo" class="">
+      Modo Narração 🗣️
+    </button>
+
+  </div>
 </header>
-    <div style="display: block;margin:24px auto;padding:0px;padding-bottom: 10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(0,0,0,0.6)" id="fichaContent">
 
-    <h1 style="text-align: center;margin-top: 45px;margin-bottom: 20px;">Problema Retratado</h1>
+<!-- ── CONTEÚDO PRINCIPAL ── -->
+<div id="fichaContent">
 
-    <div class="container" style="display: flex;">
+  <h1 id="sec-problema" class="">Problema Retratado</h1>
 
-        <div class="col panel" style="display: flex;flex-direction: column;align-items: center;justify-content: center;margin-right: 25px;">
+  <!-- Introdução + Imagem -->
+  <div class="container">
+    <div class="row-flex">
 
-            <h2 style="cursor: pointer;font-size: 19px;margin-bottom: 0px;">Introdução Geral</h2>
-            <h3 style="text-align: center;font-size: 18px;color: #d4d4d4;">A deficiência visual caracteriza-se pela limitação ou perda definitiva das funções básicas do sistema visual, afetando a capacidade de percepção de luz, cor, forma e espaço. Ela se divide em duas categorias principais: a baixa visão, em que a pessoa possui um comprometimento severo, mas ainda utiliza o resíduo visual com o auxílio de lentes ou ampliadores, e a cegueira, que é a perda total da visão ou a capacidade de distinguir apenas luz e vultos, exigindo o uso de recursos táteis e auditivos. No cotidiano, essa condição impõe severos desafios, começando pela falta de acessibilidade urbana, onde calçadas irregulares, ausência de pisos táteis e escassez de sinais sonoros comprometem a segurança e a mobilidade independente. Além das barreiras físicas, o preconceito social manifesta-se de forma velada, especialmente contra quem tem baixa visão, que muitas vezes enfrenta o descrédito e a desconfiança alheia por não se enquadrar no estereótipo da cegueira total. No mercado de trabalho e nas instituições de ensino, as dificuldades persistem devido à escassez de tecnologias assistivas, à falta de materiais didáticos adaptados e à ausência de sinalização em Braille, barreiras que limitam o pleno desenvolvimento profissional e acadêmico e reforçam a exclusão social.</h3>
-            
-            </div>
-        
-        <div class="col panel" style="display: flex;flex-direction: column;align-items: center;justify-content: center;max-width: 580px;">
-
-                <img class="ft" style="max-width: 540px;" src="https://www.saudeemdia.com.br/wp-content/uploads/2023/12/Deficiencia-visual.jpg">
-            
-          </div>
-        </div>
-
-    <div class="container" style="display: flex; flex-direction: row">
-        <div class="col panel" style="display: flex;flex-direction: column;align-items: center;justify-content: center;margin-right: 25px;">
-
-            <h2 style="cursor: pointer;font-size: 20px;margin-bottom: 0px;">Baixa Visão</h2>
-            <h3 style="text-align: center;font-size: 17px;color: #d4d4d4;">A deficiência visual caracteriza-se pela limitação ou perda definitiva das funções básicas do sistema visual, afetando a capacidade de percepção de luz, cor, forma e espaço. Ela se divide em duas categorias principais: a baixa visão, em que a pessoa possui um comprometimento severo, mas ainda utiliza o resíduo visual com o auxílio de lentes ou ampliadores, e a cegueira, que é a perda total da visão ou a capacidade de distinguir apenas luz e vultos, exigindo o uso de recursos táteis e auditivos. No cotidiano, essa condição impõe severos desafios, começando pela falta de acessibilidade urbana, onde calçadas irregulares, ausência de pisos táteis e escassez de sinais sonoros comprometem a segurança e a mobilidade independente. Além das barreiras físicas, o preconceito social manifesta-se de forma velada, especialmente contra quem tem baixa visão, que muitas vezes enfrenta o descrédito e a desconfiança alheia por não se enquadrar no estereótipo da cegueira total. No mercado de trabalho e nas instituições de ensino, as dificuldades persistem devido à escassez de tecnologias assistivas, à falta de materiais didáticos adaptados e à ausência de sinalização em Braille, barreiras que limitam o pleno desenvolvimento profissional e acadêmico e reforçam a exclusão social.</h3>
-            
-        
-     </div>
-
-    <div class="col panel" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
-     <h2 style="cursor: pointer;font-size: 22px;margin-bottom: 0px;">Cegueira</h2>
-            <h3 style="text-align: center;font-size: 17px;color: #d4d4d4;">A deficiência visual caracteriza-se pela limitação ou perda definitiva das funções básicas do sistema visual, afetando a capacidade de percepção de luz, cor, forma e espaço. Ela se divide em duas categorias principais: a baixa visão, em que a pessoa possui um comprometimento severo, mas ainda utiliza o resíduo visual com o auxílio de lentes ou ampliadores, e a cegueira, que é a perda total da visão ou a capacidade de distinguir apenas luz e vultos, exigindo o uso de recursos táteis e auditivos. No cotidiano, essa condição impõe severos desafios, começando pela falta de acessibilidade urbana, onde calçadas irregulares, ausência de pisos táteis e escassez de sinais sonoros comprometem a segurança e a mobilidade independente. Além das barreiras físicas, o preconceito social manifesta-se de forma velada, especialmente contra quem tem baixa visão, que muitas vezes enfrenta o descrédito e a desconfiança alheia por não se enquadrar no estereótipo da cegueira total. No mercado de trabalho e nas instituições de ensino, as dificuldades persistem devido à escassez de tecnologias assistivas, à falta de materiais didáticos adaptados e à ausência de sinalização em Braille, barreiras que limitam o pleno desenvolvimento profissional e acadêmico e reforçam a exclusão social.</h3>
- 
+      <div class="col panel section-block">
+        <h2 id="sec-intro" class="">Introdução Geral</h2>
+        <h3 id="txt-intro" class="">
+          A deficiência visual completa impede que a pessoa utilize a visão para se orientar no ambiente, tornando tarefas simples do cotidiano mais desafiadoras. A identificação de obstáculos, a locomoção em locais desconhecidos e a antecipação de riscos dependem frequentemente de recursos auxiliares. Pensando nisso, este projeto propõe uma solução tecnológica acessível e de baixo custo para aumentar a autonomia e a segurança de pessoas cegas durante seus deslocamentos. O sistema utiliza sensores capazes de detectar objetos próximos e emitir alertas sonoros antes que ocorra uma colisão.
+          <br><br>
+        </h3>
       </div>
-    </div>
 
-    <h1 style="text-align: center;margin-top: 60px;margin-bottom: 20px;">Sobre o Projeto</h1>
-
-    <div class="col panel" style="display: grid;place-self: center;flex-direction: column;align-items: center;justify-content: center;margin-bottom: 24px;">
-
-                <img class="ft" style="width: 1000px;" src="https://thumbs.dreamstime.com/b/molduras-de-vidro-azul-modernas-com-lentes-claras-repousam-sobre-uma-superf%C3%ADcie-refletora-design-minimalista-apresenta-o-396714215.jpg">
-            
-        </div>
-
-    <div class="col panel" style="display: grid;place-self: center;align-items: center;justify-content: center;margin-right: 25px;max-width: 1200px;">
-
-            <h2 style="cursor: pointer;font-size: 25px;margin-bottom: 0px;text-align: center;">Óculos Sonar
-"Echorizon"</h2>
-            <h3 style="text-align: center;font-size: 18px;color: #d4d4d4;">A deficiência visual caracteriza-se pela limitação ou perda definitiva das funções básicas do sistema visual, afetando a capacidade de percepção de luz, cor, forma e espaço. Ela se divide em duas categorias principais: a baixa visão, em que a pessoa possui um comprometimento severo, mas ainda utiliza o resíduo visual com o auxílio de lentes ou ampliadores, e a cegueira, que é a perda total da visão ou a capacidade de distinguir apenas luz e vultos, exigindo o uso de recursos táteis e auditivos. No cotidiano, essa condição impõe severos desafios, começando pela falta de acessibilidade urbana, onde calçadas irregulares, ausência de pisos táteis e escassez de sinais sonoros comprometem a segurança e a mobilidade independente. Além das barreiras físicas, o preconceito social manifesta-se de forma velada, especialmente contra quem tem baixa visão, que muitas vezes enfrenta o descrédito e a desconfiança alheia por não se enquadrar no estereótipo da cegueira total. No mercado de trabalho e nas instituições de ensino, as dificuldades persistem devido à escassez de tecnologias assistivas, à falta de materiais didáticos adaptados e à ausência de sinalização em Braille, barreiras que limitam o pleno desenvolvimento profissional e acadêmico e reforçam a exclusão social.</h3>
-            
-        
-     </div>
-    
-    <div class="container" style="display: flex; flex-direction: row">
-    
-        <div class="col panel" style="display: flex;flex-direction: column;align-items: center;justify-content: center;margin-right: 25px;">
-
-            <h2 style="cursor: pointer;font-size: 20px;margin-bottom: 0px;">Programação Utilizada</h2>
-            <h3 style="text-align: center;font-size: 17px;color: #d4d4d4;">A deficiência visual caracteriza-se pela limitação ou perda definitiva das funções básicas do sistema visual, afetando a capacidade de percepção de luz, cor, forma e espaço. Ela se divide em duas categorias principais: a baixa visão, em que a pessoa possui um comprometimento severo, mas ainda utiliza o resíduo visual com o auxílio de lentes ou ampliadores, e a cegueira, que é a perda total da visão ou a capacidade de distinguir apenas luz e vultos, exigindo o uso de recursos táteis e auditivos. No cotidiano, essa condição impõe severos desafios, começando pela falta de acessibilidade urbana, onde calçadas irregulares, ausência de pisos táteis e escassez de sinais sonoros comprometem a segurança e a mobilidade independente. Além das barreiras físicas, o preconceito social manifesta-se de forma velada, especialmente contra quem tem baixa visão, que muitas vezes enfrenta o descrédito e a desconfiança alheia por não se enquadrar no estereótipo da cegueira total. No mercado de trabalho e nas instituições de ensino, as dificuldades persistem devido à escassez de tecnologias assistivas, à falta de materiais didáticos adaptados e à ausência de sinalização em Braille, barreiras que limitam o pleno desenvolvimento profissional e acadêmico e reforçam a exclusão social.</h3>
-            
-        
-     </div>
-
-    <div class="col panel" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
-     <h2 style="cursor: pointer;font-size: 22px;margin-bottom: 0px;">Materiais Necessários</h2>
-            <h3 style="text-align: center;font-size: 17px;color: #d4d4d4;">A deficiência visual caracteriza-se pela limitação ou perda definitiva das funções básicas do sistema visual, afetando a capacidade de percepção de luz, cor, forma e espaço. Ela se divide em duas categorias principais: a baixa visão, em que a pessoa possui um comprometimento severo, mas ainda utiliza o resíduo visual com o auxílio de lentes ou ampliadores, e a cegueira, que é a perda total da visão ou a capacidade de distinguir apenas luz e vultos, exigindo o uso de recursos táteis e auditivos. No cotidiano, essa condição impõe severos desafios, começando pela falta de acessibilidade urbana, onde calçadas irregulares, ausência de pisos táteis e escassez de sinais sonoros comprometem a segurança e a mobilidade independente. Além das barreiras físicas, o preconceito social manifesta-se de forma velada, especialmente contra quem tem baixa visão, que muitas vezes enfrenta o descrédito e a desconfiança alheia por não se enquadrar no estereótipo da cegueira total. No mercado de trabalho e nas instituições de ensino, as dificuldades persistem devido à escassez de tecnologias assistivas, à falta de materiais didáticos adaptados e à ausência de sinalização em Braille, barreiras que limitam o pleno desenvolvimento profissional e acadêmico e reforçam a exclusão social.</h3>
-    
-        </div>
+      <div class="col panel section-block" style="max-width:580px;max-height: 445px;">
+        <img class="ft" src="https://www.saudeemdia.com.br/wp-content/uploads/2023/12/Deficiencia-visual.jpg" alt="Pessoa com deficiência visual utilizando bengala branca em calçada urbana">
       </div>
-    </div>
 
-  </body>
+    </div>
+  </div>
+
+  <!-- Baixa Visão + Cegueira -->
+  <div class="container">
+    <div class="row-flex">
+
+      <div class="col panel section-block">
+        <h2 id="sec-baixavisao" class="">Baixa Visão</h2>
+        <h3 id="txt-baixavisao" class="">
+          A baixa visão ocorre quando uma pessoa possui comprometimento visual significativo, mas ainda consegue utilizar parte da visão com o auxílio de lentes, ampliadores ou outros recursos ópticos. Mesmo com esse resíduo visual, atividades como leitura, identificação de obstáculos e orientação espacial podem ser dificultadas, exigindo adaptações e tecnologias assistivas para garantir maior independência e qualidade de vida.
+          <br><br>
+          Essas pessoas frequentemente enfrentam discriminação dupla: além das dificuldades físicas, sofrem descrédito social, pois sua deficiência não é visível o suficiente para ser reconhecida por terceiros. O acesso a recursos como materiais em fontes ampliadas, softwares de magnificação de tela e iluminação adequada é fundamental para garantir autonomia e inclusão plena.
+        </h3>
+      </div>
+
+      <div class="col panel section-block">
+        <h2 id="sec-cegueira" class="">Cegueira</h2>
+        <h3 id="txt-cegueira" class="">
+          A cegueira é caracterizada pela perda total da visão ou pela incapacidade de utilizar a visão de forma funcional para orientação e reconhecimento do ambiente. Pessoas cegas dependem de recursos táteis, auditivos e tecnológicos para realizar atividades cotidianas com segurança. Por isso, soluções que auxiliem na detecção antecipada de obstáculos podem contribuir significativamente para sua mobilidade e autonomia.
+          <br><br>
+          Entre as principais causas estão o glaucoma, a catarata não tratada, a retinopatia diabética e doenças congênitas. A inclusão de pessoas cegas exige uma transformação ampla da sociedade: das calçadas às plataformas digitais, passando pelo ensino e o mercado de trabalho. A tecnologia assistiva tem avançado significativamente, mas o acesso a essas ferramentas ainda é profundamente desigual no Brasil.
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <h1 id="sec-projeto" class="">Sobre o Projeto</h1>
+
+  <div class="col panel section-block" style="margin-bottom:24px;padding:16px;max-width: 1030px;display: grid;justify-self: center;">
+    <img class="ft" style="max-width:1000px;width:100%" src="https://thumbs.dreamstime.com/b/molduras-de-vidro-azul-modernas-com-lentes-claras-repousam-sobre-uma-superf%C3%ADcie-refletora-design-minimalista-apresenta-o-396714215.jpg" alt="Óculos de armação azul com lentes claras sobre superfície reflexiva">
+  </div>
+
+  <div class="col panel section-block" style="max-width:1200px;margin:0 auto 24px;padding:16px">
+    <h2 id="sec-echorizon" style="font-size:calc(25px * var(--font-scale));text-align:center" class="">
+      Óculos Sonar "Echorizon"
+    </h2>
+    <h3 id="txt-echorizon" class="">
+      O Echorizon é um protótipo de óculos inteligentes equipado com um sensor ultrassônico e uma placa Micro:bit V2. Seu funcionamento baseia-se na emissão de ondas sonoras que identificam a distância entre o usuário e possíveis obstáculos. Quando um objeto é detectado dentro da área de risco programada, o sistema emite um alerta sonoro, permitindo que o usuário reaja antes do contato físico com o obstáculo.
+      <br><br>
+    </h3>
+  </div>
+
+  <!-- Programação + Materiais -->
+  <div class="container">
+    <div class="row-flex">
+
+      <div class="col panel section-block">
+        <h2 id="sec-prog" class="">Programação Utilizada</h2>
+        <h3 id="txt-prog" class="">
+          O software do projeto foi desenvolvido em Python para a plataforma Micro:bit. O programa realiza leituras contínuas da distância captada pelo sensor ultrassônico e compara os valores obtidos com um limite de segurança previamente definido. Quando a distância medida é menor que esse limite, o sistema aciona automaticamente um sinal sonoro. Essa lógica simples garante rapidez na resposta e facilidade para futuras melhorias e adaptações
+          <br><br>
+        </h3>
+      </div>
+
+      <div class="col panel section-block">
+        <h2 id="sec-materiais" class="">Materiais Necessários</h2>
+        <h3 id="txt-materiais" class="">
+          Para a construção do protótipo foram utilizados uma placa Micro:bit V2, um sensor ultrassônico HC-SR04, cabos de conexão, uma fonte de alimentação, um computador para programação e o ambiente de desenvolvimento Python. Esses componentes foram selecionados por apresentarem baixo custo, fácil acesso e ampla aplicação em projetos educacionais e tecnológicos. A combinação desses materiais permitiu desenvolver um sistema funcional capaz de detectar obstáculos próximos e emitir alertas sonoros, contribuindo para a criação de uma solução assistiva simples e eficiente para pessoas com deficiência visual.
+          <br><br>
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /#fichaContent -->
+
+<!-- ── SCRIPTS DE ACESSIBILIDADE ── -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── UTILITÁRIOS ── */
+  const synth = window.speechSynthesis;
+  let currentUtterance = null;
+  let isReading = false;
+  let narrationMode = false;
+  let fontLevel = 0; // 0=normal, 1=grande, 2=muito grande
+  const fontScales = [1, 1.25, 1.55];
+  const fontLabels = ['Normal', 'Grande', 'Muito Grande'];
+
+  const indicator = document.getElementById('reading-indicator');
+  const readingLabel = document.getElementById('reading-label');
+  const toast = document.getElementById('a11y-toast');
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  /* ── LEITURA ── */
+  function getPortugueseVoice() {
+    const voices = synth.getVoices();
+    return (
+      voices.find(v => v.lang === 'pt-BR') ||
+      voices.find(v => v.lang.startsWith('pt')) ||
+      voices[0]
+    );
+  }
+
+  function stopReading() {
+    synth.cancel();
+    isReading = false;
+    currentUtterance = null;
+    document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+    indicator.classList.remove('visible');
+    document.getElementById('btn-leitura').setAttribute('aria-pressed', 'false');
+    document.getElementById('btn-leitura').classList.remove('active');
+  }
+
+  function speakText(text, onEnd, targetEl) {
+    if (!synth) { showToast('Seu navegador não suporta síntese de voz.'); return; }
+    synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'pt-BR';
+    utter.rate = 0.92;
+    utter.pitch = 1;
+    const voice = getPortugueseVoice();
+    if (voice) utter.voice = voice;
+
+    if (targetEl) {
+      targetEl.classList.add('reading-highlight');
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    utter.onend = () => {
+      if (targetEl) targetEl.classList.remove('reading-highlight');
+      if (onEnd) onEnd();
+    };
+    utter.onerror = () => {
+      if (targetEl) targetEl.classList.remove('reading-highlight');
+      if (onEnd) onEnd();
+    };
+
+    currentUtterance = utter;
+    synth.speak(utter);
+  }
+
+  /* Coleta blocos de texto legíveis da página */
+  function getReadableBlocks() {
+    return Array.from(document.querySelectorAll('h1, h2, h3, p'))
+      .filter(el => {
+        const t = el.innerText.trim();
+        return t.length > 3 && el.closest('header') === null;
+      });
+  }
+
+  function readPageSequentially() {
+    const blocks = getReadableBlocks();
+    let index = 0;
+
+    function readNext() {
+      if (!isReading || index >= blocks.length) {
+        stopReading();
+        showToast('Leitura concluída ✓');
+        return;
+      }
+      const el = blocks[index++];
+      readingLabel.textContent = 'Lendo parágrafo ' + index + '/' + blocks.length;
+      speakText(el.innerText.trim(), readNext, el);
+    }
+
+    readNext();
+  }
+
+  /* ── BOTÃO LEITURA DE TEXTO ── */
+  document.getElementById('btn-leitura').addEventListener('click', function () {
+    if (!synth) { showToast('Seu navegador não suporta síntese de voz.'); return; }
+
+    if (isReading) {
+      stopReading();
+      showToast('Leitura pausada');
+    } else {
+      // Carregar vozes (pode demorar no primeiro acesso)
+      const tryStart = () => {
+        isReading = true;
+        indicator.classList.add('visible');
+        this.setAttribute('aria-pressed', 'true');
+        this.classList.add('active');
+        showToast('Iniciando leitura da página...');
+        readPageSequentially();
+      };
+
+      if (synth.getVoices().length === 0) {
+        synth.addEventListener('voiceschanged', tryStart, { once: true });
+        synth.speak(new SpeechSynthesisUtterance('')); // trigger voices load
+      } else {
+        tryStart();
+      }
+    }
+  });
+
+  /* ── BOTÃO TAMANHO DA FONTE ── */
+  document.getElementById('btn-fonte').addEventListener('click', function () {
+    fontLevel = (fontLevel + 1) % fontScales.length;
+    const scale = fontScales[fontLevel];
+    document.documentElement.style.setProperty('--font-scale', scale);
+    showToast('Fonte: ' + fontLabels[fontLevel]);
+
+    if (narrationMode) {
+      speakText('Tamanho da fonte: ' + fontLabels[fontLevel]);
+    }
+  });
+
+  /* ── BOTÃO ALTERAR FUNDO ── */
+  document.getElementById('btn-fundo').addEventListener('click', function () {
+    const isLight = document.body.classList.toggle('light-mode');
+    this.textContent = isLight ? 'Alterar Fundo 🌙' : 'Alterar Fundo ☀️';
+    showToast(isLight ? 'Modo claro ativado' : 'Modo escuro ativado');
+
+    if (narrationMode) {
+      speakText(isLight ? 'Modo claro ativado' : 'Modo escuro ativado');
+    }
+  });
+
+  /* ── BOTÃO MODO NARRAÇÃO ── */
+  document.getElementById('btn-narration').addEventListener('click', function () {
+    narrationMode = !narrationMode;
+    this.setAttribute('aria-pressed', narrationMode ? 'true' : 'false');
+    this.classList.toggle('active', narrationMode);
+
+    if (narrationMode) {
+      showToast('Narração ativada — passe o mouse sobre o texto');
+      speakText('Modo narração ativado. Passe o mouse sobre qualquer texto para ouvi-lo.');
+    } else {
+      stopReading();
+      showToast('Narração desativada');
+    }
+  });
+
+  /* ── NARRAÇÃO POR HOVER ── */
+  let narrationTimeout = null;
+
+  document.addEventListener('mouseover', function (e) {
+    if (!narrationMode) return;
+
+    const target = e.target.closest('h1, h2, h3, p, li');
+    if (!target) return;
+
+    const text = target.innerText.trim();
+    if (!text || text.length < 4) return;
+
+    clearTimeout(narrationTimeout);
+    narrationTimeout = setTimeout(() => {
+      if (!narrationMode) return;
+      speakText(text, null, target);
+    }, 400); // pequeno atraso para evitar leitura a cada pixel
+  });
+
+  document.addEventListener('mouseout', function (e) {
+    clearTimeout(narrationTimeout);
+  });
+
+  /* ── ACESSIBILIDADE TECLADO: ESC para parar leitura ── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isReading) {
+      stopReading();
+      showToast('Leitura interrompida (Esc)');
+    }
+  });
+
+  /* ── FOCUS: lê o elemento focado quando narração ativa ── */
+  document.addEventListener('focusin', function (e) {
+    if (!narrationMode) return;
+    const target = e.target.closest('h1, h2, h3, p');
+    if (!target) return;
+    speakText(target.innerText.trim(), null, target);
+  });
+
+})();
+</script>
+
+
+
+</body>
 </html>
