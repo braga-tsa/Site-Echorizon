@@ -18,7 +18,7 @@
       --font-scale: 1;
     }
 
-    /* ── MODO CLARO ── */
+    
     body.light-mode {
       --bg: #f0f0f0;
       --panel: rgba(255,255,255,0.75);
@@ -41,7 +41,7 @@
       transition: background 0.4s, color 0.4s;
     }
 
-    /* ── LEITURA HIGHLIGHT ── */
+    
     .reading-highlight {
       background: rgba(86, 130, 167, 0.35) !important;
       border-radius: 4px;
@@ -49,7 +49,7 @@
       transition: background 0.2s;
     }
 
-    /* ── HEADER ── */
+    
     header {
       padding: 15px 16px 0;
       background: var(--header-bg);
@@ -66,7 +66,7 @@
       margin-bottom: 12px;
     }
 
-    /* ── BOTÕES ── */
+   
     .btn-row {
       display: flex;
       flex-wrap: wrap;
@@ -100,7 +100,7 @@
 
     #btn-narration { margin-left: auto; }
 
-    /* ── INDICADOR DE LEITURA ── */
+    /
     #reading-indicator {
       display: none;
       position: fixed;
@@ -121,7 +121,7 @@
     .pulse { width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s infinite; }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(0.7)} }
 
-    /* ── LAYOUT ── */
+    
     .container {
       max-width: 1600px;
       margin: 24px auto;
@@ -191,7 +191,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     }
 
-    /* ── TOOLTIP ACESSIBILIDADE ── */
+    
     #a11y-toast {
       position: fixed;
       top: 80px;
@@ -223,36 +223,36 @@
 </head>
 <body class="light-mode">
 
-<!-- ── INDICADOR FLUTUANTE DE LEITURA ── -->
+
 <div id="reading-indicator" role="status" aria-live="polite" class="">
   <span class="pulse"></span>
   <span id="reading-label">Lendo parágrafo 14/14</span>
 </div>
 
-<!-- ── TOAST ── -->
+
 <div id="a11y-toast" aria-live="polite" class="">Modo claro ativado</div>
 
-<!-- ── HEADER ── -->
+
 <header>
   <div>
     <h2>Site Deficiência Visual Galbi</h2>
   </div>
   <div class="btn-row">
 
-    <!-- Leitura de Texto: lê a página inteira -->
+    
     <button id="btn-leitura" aria-pressed="false" title="Ler todo o conteúdo da página em voz alta" class="">
       Leitura de Texto 🔊
     </button>
 
-    <!-- Tamanho da Fonte: cicla entre 3 tamanhos dos baguio -->
+   
     <button id="btn-fonte" title="Aumentar ou diminuir o tamanho da fonte">
       Tamanho da Fonte 🔤
     </button>
 
-    <!-- Alterar Fundo: alterna modo claro/escuro -->
+    
     <button id="btn-fundo" title="Alternar entre fundo escuro e claro">Alterar Fundo 🌙</button>
 
-    <!-- Modo Narração: lê o elemento ao passar o mouse -->
+   
     <button id="btn-narration" aria-pressed="false" title="Ativar narração: posicione o mouse sobre qualquer texto para ouvi-lo" class="">
       Modo Narração 🗣️
     </button>
@@ -260,12 +260,12 @@
   </div>
 </header>
 
-<!-- ── CONTEÚDO PRINCIPAL ── -->
+
 <div id="fichaContent">
 
   <h1 id="sec-problema" class="">Problema Retratado</h1>
 
-  <!-- Introdução + Imagem -->
+  
   <div class="container">
     <div class="row-flex">
 
@@ -284,7 +284,7 @@
     </div>
   </div>
 
-  <!-- Baixa Visão + Cegueira -->
+ 
   <div class="container">
     <div class="row-flex">
 
@@ -325,7 +325,7 @@
     </h3>
   </div>
 
-  <!-- Programação + Materiais -->
+  
   <div class="container">
     <div class="row-flex">
 
@@ -348,14 +348,14 @@
     </div>
   </div>
 
-</div><!-- /#fichaContent -->
+</div>
 
-<!-- ── SCRIPTS DE ACESSIBILIDADE ── -->
+l
 <script>
 (function () {
   'use strict';
 
-  /* ── UTILITÁRIOS ── */
+  
   const synth = window.speechSynthesis;
   let currentUtterance = null;
   let isReading = false;
@@ -374,7 +374,7 @@
     setTimeout(() => toast.classList.remove('show'), 2200);
   }
 
-  /* ── LEITURA ── */
+  
   function getPortugueseVoice() {
     const voices = synth.getVoices();
     return (
@@ -422,7 +422,7 @@
     synth.speak(utter);
   }
 
-  /* Coleta blocos de texto legíveis da página */
+  
   function getReadableBlocks() {
     return Array.from(document.querySelectorAll('h1, h2, h3, p'))
       .filter(el => {
@@ -449,7 +449,7 @@
     readNext();
   }
 
-  /* ── BOTÃO LEITURA DE TEXTO ── */
+  
   document.getElementById('btn-leitura').addEventListener('click', function () {
     if (!synth) { showToast('Seu navegador não suporta síntese de voz.'); return; }
 
@@ -457,7 +457,7 @@
       stopReading();
       showToast('Leitura pausada');
     } else {
-      // Carregar vozes (pode demorar no primeiro acesso)
+      
       const tryStart = () => {
         isReading = true;
         indicator.classList.add('visible');
@@ -476,7 +476,7 @@
     }
   });
 
-  /* ── BOTÃO TAMANHO DA FONTE ── */
+  
   document.getElementById('btn-fonte').addEventListener('click', function () {
     fontLevel = (fontLevel + 1) % fontScales.length;
     const scale = fontScales[fontLevel];
@@ -488,7 +488,7 @@
     }
   });
 
-  /* ── BOTÃO ALTERAR FUNDO ── */
+  
   document.getElementById('btn-fundo').addEventListener('click', function () {
     const isLight = document.body.classList.toggle('light-mode');
     this.textContent = isLight ? 'Alterar Fundo 🌙' : 'Alterar Fundo ☀️';
@@ -499,7 +499,7 @@
     }
   });
 
-  /* ── BOTÃO MODO NARRAÇÃO ── */
+  
   document.getElementById('btn-narration').addEventListener('click', function () {
     narrationMode = !narrationMode;
     this.setAttribute('aria-pressed', narrationMode ? 'true' : 'false');
@@ -514,7 +514,7 @@
     }
   });
 
-  /* ── NARRAÇÃO POR HOVER ── */
+  
   let narrationTimeout = null;
 
   document.addEventListener('mouseover', function (e) {
@@ -530,14 +530,14 @@
     narrationTimeout = setTimeout(() => {
       if (!narrationMode) return;
       speakText(text, null, target);
-    }, 400); // pequeno atraso para evitar leitura a cada pixel
+    }, 400); 
   });
 
   document.addEventListener('mouseout', function (e) {
     clearTimeout(narrationTimeout);
   });
 
-  /* ── ACESSIBILIDADE TECLADO: ESC para parar leitura ── */
+  
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && isReading) {
       stopReading();
@@ -545,7 +545,7 @@
     }
   });
 
-  /* ── FOCUS: lê o elemento focado quando narração ativa ── */
+  
   document.addEventListener('focusin', function (e) {
     if (!narrationMode) return;
     const target = e.target.closest('h1, h2, h3, p');
